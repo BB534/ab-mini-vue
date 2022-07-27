@@ -1,6 +1,6 @@
 class ReactiveEffect {
   private _fn: any
-  constructor(fn: any) {
+  constructor(fn: any, public scheduler?: any) {
     this._fn = fn
   }
   run() {
@@ -33,14 +33,19 @@ export function trigger(target: any, key: string | symbol) {
   const depMaps = targetMap.get(target)
   const deps = depMaps.get(key) as Set<any>
   for (const _effect of deps) {
-    _effect.run()
+    if (_effect.scheduler) {
+      _effect.scheduler()
+    } else {
+      _effect.run()
+    }
   }
 }
 
 let activeEffect: any
 
-export function effect(_fn: () => any) {
-  const _effect = new ReactiveEffect(_fn)
+export function effect(_fn: () => any, options: any = {}) {
+  const scheduler = options.scheduler
+  const _effect = new ReactiveEffect(_fn, scheduler)
   _effect.run()
   // bind 用于指定effect的this
   return _effect.run.bind(_effect)
