@@ -1,8 +1,11 @@
+import { extend } from '../shared'
 class ReactiveEffect {
   private _fn: any
   public deps = []
   protected active = true
-  constructor(fn: any, public scheduler?: any) {
+  public scheduler: Function | undefined
+  public onStop?: () => void
+  constructor(fn: any) {
     this._fn = fn
   }
   run() {
@@ -13,6 +16,9 @@ class ReactiveEffect {
     // 给一个active状态,优化多次调用，实际上只是清空一次
     if (this.active) {
       clearEffect(this)
+      if (this.onStop) {
+        this.onStop()
+      }
       this.active = false
     }
   }
@@ -41,8 +47,10 @@ export function track(target: any, key: string | symbol) {
     dep = new Set()
     depMps.set(key, dep)
   }
+  // 单纯的触发get操作时,并不会执行走到effect中，所以此时的activeEffect是undefined
+  if (!activeEffect) return
   dep.add(activeEffect)
-  // 反向收集dep
+  // 反向收集dep,用于清空
   activeEffect.deps.push(dep)
 }
 
@@ -62,8 +70,9 @@ export function trigger(target: any, key: string | symbol) {
 let activeEffect: any
 
 export function effect(_fn: () => any, options: any = {}) {
-  const scheduler = options.scheduler
-  const _effect = new ReactiveEffect(_fn, scheduler)
+  const _effect = new ReactiveEffect(_fn,)
+  // 将options的参数挂载到_effect实例上
+  extend(_effect, options)
   _effect.run()
   // bind 用于指定effect的this
   const runner: any = _effect.run.bind(_effect)
