@@ -5,7 +5,7 @@ class ReactiveEffect {
   }
   run() {
     activeEffect = this
-    this._fn()
+    return this._fn()
   }
 }
 
@@ -42,4 +42,6 @@ let activeEffect: any
 export function effect(_fn: () => any) {
   const _effect = new ReactiveEffect(_fn)
   _effect.run()
+  // bind 用于指定effect的this
+  return _effect.run.bind(_effect)
 }
