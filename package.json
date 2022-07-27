@@ -1,0 +1,24 @@
+{
+	"name": "ab-miniVue",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"test": "jest"
+	},
+	"keywords": [
+		"mini-vue",
+		"abvue"
+	],
+	"author": "阿逼",
+	"license": "ISC",
+	"devDependencies": {
+		"@babel/core": "^7.18.9",
+		"@babel/preset-env": "^7.18.9",
+		"@babel/preset-typescript": "^7.18.6",
+		"@types/jest": "^28.1.6",
+		"babel-jest": "^28.1.3",
+		"jest": "^28.1.3",
+		"typescript": "^4.7.4"
+	}
+}
