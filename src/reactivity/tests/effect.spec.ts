@@ -1,4 +1,4 @@
-import { effect } from '../effect';
+import { effect, stop } from '../effect';
 import { reactive } from '../reactive';
 describe('effect', () => {
   // 1. weffect收集
@@ -58,5 +58,24 @@ describe('effect', () => {
     run()
     // 手动调用runner函数时触发effect中的fn,dummy预期值应为2
     expect(dummy).toBe(2)
+  })
+
+  it("stop", () => {
+    // 1.effect 调用返回runner
+    // 2.然后obj触发set操作,更改值。
+    // 3.调用stop之后,将effect清空，不让其fn执行.
+    // 4.手动执行runner后值effect的fn正常触发
+    let dummy
+    const obj = reactive({ prop: 1 })
+    const runner = effect(() => {
+      dummy = obj.prop
+    })
+    obj.prop = 2
+    expect(dummy).toBe(2)
+    stop(runner)
+    obj.prop = 3
+    expect(dummy).toBe(2)
+    runner()
+    expect(dummy).toBe(3)
   })
 })
