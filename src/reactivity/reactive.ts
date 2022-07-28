@@ -1,16 +1,27 @@
 import { mutablesHandlers, readonlyHandlers } from './baseHandlers'
 
-export function reactive(raw: any) {
-  // 创建Proxy对象,get和set时触发收集依赖，触发依赖
-  return createBaseHandlers(raw, mutablesHandlers)
+
+export const enum ReactiveFlags {
+  isReadonly = '__ab__isReadonly',
+  isReactive = '__ab__isReactive'
 }
 
+export function reactive(raw: any) {
+  return createReactiveObject(raw, mutablesHandlers)
+}
 
 export function readonly(raw: any) {
-  return createBaseHandlers(raw, readonlyHandlers)
+  return createReactiveObject(raw, readonlyHandlers)
 }
 
+export function isReadonly(value: any) {
+  return !!value[ReactiveFlags.isReadonly]
+}
 
-function createBaseHandlers(raw: any, baseHandlers: any) {
+export function isReactive(value: any) {
+  return !!value[ReactiveFlags.isReactive]
+}
+
+function createReactiveObject(raw: any, baseHandlers: any) {
   return new Proxy(raw, baseHandlers)
 }
