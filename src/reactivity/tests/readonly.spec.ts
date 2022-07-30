@@ -21,4 +21,9 @@ describe("readonly", () => {
     expect(console.warn).toBeCalled()
     expect(wrapped.foo).toBe(1)
   })
+  it("nested readonly", () => {
+    const origin = { foo: 1, bar: { baz: 2 } }
+    const wrapped = readonly(origin)
+    expect(isReadonly(wrapped.bar)).toBe(true)
+  })
 })
