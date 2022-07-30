@@ -16,4 +16,17 @@ describe('reactive', () => {
     expect(isReactive(user)).toBe(true)
     expect(isReactive(origin)).toBe(false)
   })
+
+  it("nested reactive", () => {
+    const origin = {
+      nested: {
+        foo: 1
+      },
+      array: [{ bar: 2 }]
+    }
+    const obj = reactive(origin)
+    expect(isReactive(obj.nested)).toBe(true)
+    expect(isReactive(obj.array)).toBe(true)
+    expect(isReactive(obj.array[0])).toBe(true)
+  })
 });

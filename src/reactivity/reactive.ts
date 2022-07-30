@@ -6,7 +6,7 @@ export const enum ReactiveFlags {
   isReactive = '__ab__isReactive'
 }
 
-export function reactive(raw: any) {
+export function reactive(raw: object) {
   return createReactiveObject(raw, mutablesHandlers)
 }
 

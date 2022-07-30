@@ -81,7 +81,6 @@ describe('effect', () => {
     expect(dummy).toBe(3)
   })
 
-
   it("onStop", () => {
     // 1. effect时返回runner,同时传入一个onStop函数
     // 在触发stop函数时同时触发onStop函数
