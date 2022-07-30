@@ -5,7 +5,7 @@ let shouldTrack: boolean
 class ReactiveEffect {
   private _fn: any
   public deps = []
-  private active = true // 用于stop判断激活状态,如果为true为活跃false为冻结
+  private active = true // 用于stop判断状态
   public scheduler: Function | undefined
   public onStop?: () => void
   constructor(fn: any) {
@@ -37,16 +37,17 @@ class ReactiveEffect {
 
 // 清除 deps内的effact
 function clearEffect(effect: any) {
+  // 如果是stop就把属于自身的存储容器清空
   effect.deps.forEach((dep: any) => {
     dep.delete(effect)
     effect.deps.length = 0
   });
 }
 
-// 需要按照 {foo:1} -> 这样的键值对创建一个
-// map:[{foo:1}:[set{foo:[effect]}]]存储一个个effect
+// 需要按照 {foo:1} -> 这样的键值对创建一个 map:[{foo:1}:[set{foo:[effect,effect1,effect2]}]]存储一个个effect
 const targetMap = new Map()
 export function track(target: any, key: string | symbol) {
+  if (!isTracking()) return
   let depMps = targetMap.get(target)
   // 初始化,不存在就需要创建
   if (!depMps) {
@@ -59,13 +60,19 @@ export function track(target: any, key: string | symbol) {
     dep = new Set()
     depMps.set(key, dep)
   }
-  // 如果是单纯对象的触发get操作时,并不会执行走到effect中，所以此时的activeEffect是undefined那么就不要收集
-  if (!activeEffect) return
-  // 需不需要收集依赖
-  if (!shouldTrack) return
+  // 如果已经存在了这个fn那么就不需要重复收集了
+  if (dep.has(activeEffect)) return
   dep.add(activeEffect)
   // 反向收集dep,用于清空
   activeEffect.deps.push(dep)
+}
+
+function isTracking() {
+  // 如果是单纯对象的触发get操作时,并不会执行走到effect中，所以此时的activeEffect是undefined那么就不要收集
+  // if (!activeEffect) return
+  // 需不需要收集依赖
+  // if (!shouldTrack) return
+  return shouldTrack && activeEffect !== undefined
 }
 
 export function trigger(target: any, key: string | symbol) {

@@ -74,7 +74,7 @@ describe('effect', () => {
     expect(dummy).toBe(2)
     stop(runner)
     // obj.prop = 3 set时候直接赋值不会触发到get操作
-    // obj.prop++ === obj.prop = boj.prop + 1所以会先走get操作,但是因为我们在get中没有做判断，所以他还是会收集依赖,那么stop就失效了
+    // obj.prop++ === obj.prop = boj.prop + 1所以会先走get操作,但是因为我们在get中没有做判断，所以他还是会去收集依赖并且触发
     obj.prop++
     expect(dummy).toBe(2)
     runner()
