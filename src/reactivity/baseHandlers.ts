@@ -3,15 +3,17 @@ import { ReactiveFlags } from './reactive'
 const get = createGetter()
 const readonlyGet = createGetter(true)
 const set = createSetter()
-function createGetter(isRadonly = false) {
+function createGetter(isReadonly = false) {
   return function get(target: any, key: string | symbol) {
     const res = Reflect.get(target, key)
+    // 判断是不是readonly和reactive
     if (key === ReactiveFlags.isReadonly) {
-      return isRadonly
+      return isReadonly
     } else if (key === ReactiveFlags.isReactive) {
-      return !isRadonly
+      return !isReadonly
     }
-    if (!isRadonly) {
+    // 如果不是Readonly            
+    if (!isReadonly) {
       track(target, key)
     }
     return res

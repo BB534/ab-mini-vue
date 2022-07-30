@@ -1,16 +1,27 @@
 import { extend } from '../shared'
+
+let activeEffect: any
+let shouldTrack: boolean
 class ReactiveEffect {
   private _fn: any
   public deps = []
-  protected active = true
+  private active = true // 用于stop判断激活状态,如果为true为活跃false为冻结
   public scheduler: Function | undefined
   public onStop?: () => void
   constructor(fn: any) {
     this._fn = fn
   }
   run() {
+    // 如果是stop状态,那么直接执行返回，不去做触发依赖
+    if (!this.active) {
+      return this._fn()
+    }
+    shouldTrack = true
     activeEffect = this
-    return this._fn()
+    const res = this._fn()
+    // shouldTrack 关闭
+    shouldTrack = false
+    return res
   }
   stop() {
     // 给一个active状态,优化多次调用，实际上只是清空一次
@@ -28,6 +39,7 @@ class ReactiveEffect {
 function clearEffect(effect: any) {
   effect.deps.forEach((dep: any) => {
     dep.delete(effect)
+    effect.deps.length = 0
   });
 }
 
@@ -47,8 +59,10 @@ export function track(target: any, key: string | symbol) {
     dep = new Set()
     depMps.set(key, dep)
   }
-  // 单纯的触发get操作时,并不会执行走到effect中，所以此时的activeEffect是undefined
+  // 如果是单纯对象的触发get操作时,并不会执行走到effect中，所以此时的activeEffect是undefined那么就不要收集
   if (!activeEffect) return
+  // 需不需要收集依赖
+  if (!shouldTrack) return
   dep.add(activeEffect)
   // 反向收集dep,用于清空
   activeEffect.deps.push(dep)
@@ -67,10 +81,9 @@ export function trigger(target: any, key: string | symbol) {
   }
 }
 
-let activeEffect: any
 
 export function effect(_fn: () => any, options: any = {}) {
-  const _effect = new ReactiveEffect(_fn,)
+  const _effect = new ReactiveEffect(_fn)
   // 将options的参数挂载到_effect实例上
   extend(_effect, options)
   _effect.run()
