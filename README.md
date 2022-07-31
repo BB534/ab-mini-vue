@@ -17,3 +17,6 @@
  - [x] 支持 effect.scheduler
  - [x] 支持 effect.stop
  - [x] 支持 effect.onStop
+
+ ## ref
+ - [x] ref的实现

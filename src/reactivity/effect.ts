@@ -60,6 +60,9 @@ export function track(target: any, key: string | symbol) {
     dep = new Set()
     depMps.set(key, dep)
   }
+  trackEffects(dep)
+}
+export function trackEffects(dep: any) {
   // 如果已经存在了这个fn那么就不需要重复收集了
   if (dep.has(activeEffect)) return
   dep.add(activeEffect)
@@ -67,7 +70,7 @@ export function track(target: any, key: string | symbol) {
   activeEffect.deps.push(dep)
 }
 
-function isTracking() {
+export function isTracking() {
   // 如果是单纯对象的触发get操作时,并不会执行走到effect中，所以此时的activeEffect是undefined那么就不要收集
   // if (!activeEffect) return
   // 需不需要收集依赖
@@ -79,6 +82,10 @@ export function trigger(target: any, key: string | symbol) {
   // 从容器中取出target下key对应的所有的effect触发里面的fn
   const depMaps = targetMap.get(target)
   const deps = depMaps.get(key) as Set<any>
+  triggerEffects(deps)
+}
+
+export function triggerEffects(deps: any) {
   for (const _effect of deps) {
     if (_effect.scheduler) {
       _effect.scheduler()
@@ -87,7 +94,6 @@ export function trigger(target: any, key: string | symbol) {
     }
   }
 }
-
 
 export function effect(_fn: () => any, options: any = {}) {
   const _effect = new ReactiveEffect(_fn)

@@ -44,8 +44,8 @@ export const mutablesHandlers = {
 
 export const readonlyHandlers = {
   get: readonlyGet,
-  set(target: any, key: string | symbol, newValue: any) {
-    console.warn(`${key as string} set fails because ${target} is readonly`)
+  set(target: any, key: any) {
+    console.warn(`${key} set fails because ${target} is readonly`)
     return true
   }
 }
