@@ -9,6 +9,7 @@
 - [x] 支持 isReactive
 - [x] 支持 isReadonly
 - [x] 支持嵌套 reactive
+- [x] 支持shallowReadonly
 
  ## effect
  - [x] effect的实现
