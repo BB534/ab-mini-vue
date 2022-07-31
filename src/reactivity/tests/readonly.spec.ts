@@ -1,4 +1,4 @@
-import { isReadonly, readonly } from '../reactive';
+import { isProxy, isReadonly, readonly } from '../reactive';
 describe("readonly", () => {
   it('readonly has get', () => {
     const origin = { foo: 1, bar: { baz: 2 } }
@@ -6,6 +6,7 @@ describe("readonly", () => {
     expect(wrapped).not.toBe(origin)
     wrapped.foo = 2
     expect(wrapped.foo).toBe(1)
+    expect(isProxy(wrapped)).toBe(true)
   });
   it('readonly has isReadonly', () => {
     const origin = { foo: 1, bar: { baz: 2 } }

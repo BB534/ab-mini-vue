@@ -8,9 +8,9 @@
 - [x] readonly 的实现
 - [x] 支持 isReactive
 - [x] 支持 isReadonly
-- [x] 支持嵌套 reactive
-- [x] 支持shallowReadonly
-
+- [x] 支持嵌套 reactive,readonly
+- [x] 支持 shallowReadonly
+- [x] 支持 isProxy
  ## effect
  - [x] effect的实现
  - [x] 支持 effect.runner

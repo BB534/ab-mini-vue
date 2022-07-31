@@ -1,7 +1,7 @@
 import { effect, stop } from '../effect';
 import { reactive } from '../reactive';
 describe('effect', () => {
-  // 1. weffect收集
+  // 1. effect收集
   it('happy path', () => {
     const user = reactive({
       age: 10
