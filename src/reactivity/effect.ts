@@ -2,14 +2,15 @@ import { extend } from '../shared'
 
 let activeEffect: any
 let shouldTrack: boolean
-class ReactiveEffect {
+export class ReactiveEffect {
   private _fn: any
   public deps = []
   private active = true // 用于stop判断状态
   public scheduler: Function | undefined
   public onStop?: () => void
-  constructor(fn: any) {
+  constructor(fn: any, scheduler?: Function) {
     this._fn = fn
+    this.scheduler = scheduler
   }
   run() {
     // 如果是stop状态,那么直接执行返回，不去做触发依赖

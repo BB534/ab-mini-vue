@@ -1,6 +1,6 @@
 import { isProxy, isReactive, reactive } from '../reactive';
 describe('reactive', () => {
-  it("happy path", () => {
+  it("happy path reactive", () => {
     const originl = { foo: 1 }
     const observed = reactive(originl)
     // Proxy({foo:1}) != {foo:1}

@@ -23,3 +23,6 @@
  - [x] 支持isRef
  - [x] 支持unRef
  - [x] 支持proxyRefs
+
+ ## computed
+ - [x] computed的实现
