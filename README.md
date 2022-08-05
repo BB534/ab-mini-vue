@@ -22,3 +22,4 @@
  - [x] ref的实现
  - [x] 支持isRef
  - [x] 支持unRef
+ - [x] 支持proxyRefs

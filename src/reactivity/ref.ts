@@ -50,3 +50,22 @@ export function unRef(ref: any) {
   // 如果本身是一个ref就返回ref.value的值,否则返回值本身
   return isRef(ref) ? ref.value : ref
 }
+
+
+export function proxyRefs(raw: any) {
+  return new Proxy(raw, {
+    get(target, key) {
+      // is ref ? ref.value : raw === unRef(raw)
+      return unRef(Reflect.get(target, key))
+    },
+    set(target, key, newValue) {
+      // 如果修改的原属性是一个ref,并且新值是一个普通值，那么就直接修改value
+      // 否则的话就是直接替换
+      if (isRef(target[key]) && !isRef(newValue)) {
+        return target[key].value = newValue
+      } else {
+        return Reflect.set(target, key, newValue)
+      }
+    }
+  })
+}
