@@ -1,6 +1,7 @@
 
 # 响应式核心 reactivity
 
+
  ## reactive
 - [x] reactive 的实现
 - [x] track 收集依赖
@@ -26,3 +27,20 @@
 
  ## computed
  - [x] computed的实现
+
+
+ # runtime-core
+ - [x] createApp的实现
+ - [x] 支持 mount
+ - [x] 支持 h
+ - [x] 支持 setup
+ - [] patch
+ - [] processElement
+ - [] processComponent
+ - [] setupRenderEffect
+ - [] createVnode
+ - [] createComponentInstance
+ - [] setupComponent
+ - [] setupStatefulComponent
+ - [] handlerSetupResult
+ - [] finishComponentSetup
