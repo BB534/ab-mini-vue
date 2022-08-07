@@ -23,7 +23,6 @@ function mountElement(vnode, container) {
   const { type, props, children } = vnode
   const el = document.createElement(type) as Element
   // 如果是字符串类型的子节点,直接挂载,如果是数组类型继续遍历然后patch
-
   if (typeof children === 'string') {
     el.textContent = children
   } else if (Array.isArray(children)) {
