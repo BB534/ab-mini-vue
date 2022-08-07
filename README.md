@@ -33,14 +33,14 @@
  - [x] createApp的实现
  - [x] 支持 mount
  - [x] 支持 h
- - [x] 支持 setup
- - [] patch
- - [] processElement
- - [] processComponent
- - [] setupRenderEffect
- - [] createVnode
- - [] createComponentInstance
- - [] setupComponent
- - [] setupStatefulComponent
- - [] handlerSetupResult
- - [] finishComponentSetup
+ - [] 支持 setup [待完成]
+ - [x] patch
+ - [x] processElement
+ - [x] processComponent
+ - [x] setupRenderEffect
+ - [x] createVnode
+ - [x] createComponentInstance
+ - [x] setupComponent
+ - [x] setupStatefulComponent
+ - [x] handlerSetupResult
+ - [x] finishComponentSetup
