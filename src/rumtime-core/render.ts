@@ -7,7 +7,13 @@ export function render(vnode: any, container: any) {
 function patch(vnode: any, container: any) {
   // patch -> vnode.type  组件类型 ？ el类型
   processComponent(vnode, container)
+
+  // TODO 判断vnode是不是一个element
+  // 是一个element 那么就处理element
+  processElement()
 }
+
+function processElement() { }
 
 function processComponent(vnode, container) {
   // 组件类型，挂载component

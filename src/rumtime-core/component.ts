@@ -42,8 +42,9 @@ function finishComponentSetup(instance) {
   // 看看当前组件有没有render
   const Component = instance.type
 
+  instance.render = Component.render
   // 如果组件render存在
-  if (Component.render) {
-    instance.render = Component.render
-  }
+  // if (Component.render) {
+
+  // }
 }

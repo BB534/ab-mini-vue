@@ -1,10 +1,9 @@
+import { h } from '../../lib/ab-mini-vue-esm.js'
 export const App = {
 	render() {
-		// 视图
 		return h('div', 'hi,' + this.msg)
 	},
 	setup() {
-		// composition api
 		return {
 			msg: 'mini-vue'
 		}
