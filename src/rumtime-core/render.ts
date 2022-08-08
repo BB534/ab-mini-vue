@@ -49,7 +49,7 @@ function processComponent(vnode, container) {
 function mountComponent(vnode, container) {
   // 抽象出一个实例对象
   const instance = createComponentInstance(vnode)
-  // 调用seup
+  // 调用setup
   setupComponent(instance)
   // 调用render
   setupRenderEffect(instance, container)
@@ -57,7 +57,9 @@ function mountComponent(vnode, container) {
 
 function setupRenderEffect(instance, container) {
   // 拆箱 -> patch -> component ? -> patch
-  const subTree = instance.render()
+  // 获取setupState代理对象挂载到render
+  const { proxy } = instance
+  const subTree = instance.render.call(proxy)
   // subTree === vnode  
   // vnode -> element -> mountElement
   patch(subTree, container)
