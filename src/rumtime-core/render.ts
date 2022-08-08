@@ -21,7 +21,7 @@ function processElement(vnode, container) {
 
 function mountElement(vnode, container) {
   const { type, props, children } = vnode
-  // 将当前节点挂载到el
+  // 将 el 挂载到element类型的vnode.el上
   const el = (vnode.el = document.createElement(type) as Element)
   // 如果是字符串类型的子节点,直接挂载,如果是数组类型继续遍历然后patch
   if (typeof children === 'string') {
@@ -57,7 +57,7 @@ function mountComponent(vnode, container) {
 }
 
 function setupRenderEffect(vnode, instance, container) {
-  // 拆箱 -> patch -> component ? -> patch
+  // App -> patch -> component ? -> patch
   // 获取setupState代理对象挂载到render
   const { proxy } = instance
   const subTree = instance.render.call(proxy)

@@ -31,16 +31,9 @@
 
  # runtime-core
  - [x] createApp的实现
- - [x] 支持 mount
- - [x] 支持 h
- - [] 支持 setup [待完成]
+ - [x] createVnode 的实现
+ - [x] render 的实现
+ - [x] h 函数
  - [x] patch
- - [x] processElement
- - [x] processComponent
- - [x] setupRenderEffect
- - [x] createVnode
- - [x] createComponentInstance
- - [x] setupComponent
- - [x] setupStatefulComponent
- - [x] handlerSetupResult
- - [x] finishComponentSetup
+ - [x] 支持 $el
+ - [x] 支持 setupState
