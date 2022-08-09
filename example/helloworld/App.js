@@ -15,7 +15,15 @@ export const App = {
 			[
 				h('p', { class: 'red' }, 'hi' + this.msg),
 				h('p', { class: 'blue' }, 'blue'),
-				h(Foo, { count: 1 })
+				h(Foo, {
+					count: 1,
+					onAddFoo(a, b) {
+						console.log('短横线触发方式', a, b)
+					},
+					onAdd(c, d) {
+						console.log('驼峰方式触发', c, d)
+					}
+				})
 			]
 			// 调用Foo组件
 		)
