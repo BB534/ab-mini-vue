@@ -58,7 +58,7 @@ function processComponent(vnode, container) {
 }
 
 function mountComponent(vnode, container) {
-  // 抽象出一个实例对象
+  // 抽象出一个组件实例对象
   const instance = createComponentInstance(vnode)
   // 调用setup
   setupComponent(instance)

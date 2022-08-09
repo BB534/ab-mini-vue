@@ -1,4 +1,5 @@
-import { mutablesHandlers, readonlyHandlers, shallowReadonlyHandlers } from './baseHandlers'
+import { isObject } from './../shared/index';
+import { mutablesHandlers, readonlyHandlers, shallowReadonlyHandlers } from './baseHandlers';
 
 
 export const enum ReactiveFlags {
@@ -31,6 +32,11 @@ export function shallowReadonly(raw: any) {
   return createReactiveObject(raw, shallowReadonlyHandlers)
 }
 
-function createReactiveObject(raw: any, baseHandlers: any) {
-  return new Proxy(raw, baseHandlers)
+function createReactiveObject(target: any, baseHandlers: any) {
+  // 如果props不是一个对象,报警告直接返回
+  if (!isObject(target)) {
+    console.warn(`target ${target} 必须是一个对象`)
+    return target
+  }
+  return new Proxy(target, baseHandlers)
 }
