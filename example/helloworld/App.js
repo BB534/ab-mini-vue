@@ -3,10 +3,16 @@ window.self = null
 export const App = {
 	render() {
 		window.self = this
-		return h('div', { id: 'root' }, [
-			h('p', { class: 'red' }, 'hi' + this.msg),
-			h('p', { class: 'blue' }, 'blue')
-		])
+		return h(
+			'div',
+			{
+				id: 'root',
+				onClick: () => {
+					console.log(1)
+				}
+			},
+			[h('p', { class: 'red' }, 'hi' + this.msg), h('p', { class: 'blue' }, 'blue')]
+		)
 	},
 	setup() {
 		return {
