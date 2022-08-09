@@ -37,3 +37,5 @@
  - [x] patch
  - [x] 支持 $el
  - [x] 支持 setupState
+ - [x] 支持注册事件
+ - [x] 支持props
