@@ -8,7 +8,25 @@ export const App = {
 		// 单个插槽
 		// const slot = h(Slots, {}, h('p', {}, 'slots插槽p标签'))
 		// 数组插槽
-		const slot = h(Slots, {}, [h('p', {}, 'slots插槽p标签'), h('h1', {}, '数组插槽h1标签')])
+		// const slot = h(Slots, {}, [h('p', {}, 'slots插槽p标签'), h('h1', {}, '数组插槽h1标签')])
+		// 转变 改为具名插槽
+		// const slot = h(
+		// 	Slots,
+		// 	{},
+		// 	{
+		// 		header: h('p', {}, 'header具名插槽'),
+		// 		footer: h('p', {}, 'footer具名插槽')
+		// 	}
+		// )
+		// 转变 改为作用域插槽
+		const slot = h(
+			Slots,
+			{},
+			{
+				header: ({ title }) => h('p', {}, 'header:' + title),
+				footer: () => h('p', {}, 'footer具名插槽')
+			}
+		)
 		return h(
 			'div',
 			{

@@ -38,5 +38,7 @@
  - [x] 支持 $el
  - [x] 支持 setupState
  - [x] 支持注册事件
- - [x] 支持props
- - [x] 支持emit
+ - [x] 支持 props
+ - [x] 支持 emit
+ - [x] 支持 $slots
+ - [x] 支持 slots 
