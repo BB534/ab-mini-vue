@@ -22,6 +22,7 @@ export const Foo = {
 			},
 			'emitBUtton'
 		)
+
 		const foo = h('p', {}, 'foo:' + this.count)
 		return h('div', {}, [foo, btns])
 	}

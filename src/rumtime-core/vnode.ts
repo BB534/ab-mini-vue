@@ -5,7 +5,7 @@ export function createVnode(type: any, props?: any, children?: any) {
     props,
     children,
     shapeFlag: getTypeFlags(type),
-    el: null
+    el: null,
   }
 
   // 处理子节点类型
