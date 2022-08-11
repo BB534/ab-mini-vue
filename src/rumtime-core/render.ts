@@ -1,5 +1,6 @@
 import { createComponentInstance, setupComponent } from './component';
 import { shapeFlags } from './shapeFlags';
+import { Fragment, Text } from './vnode'
 export function render(vnode: any, container: any) {
   // patch
   patch(vnode, container)
@@ -7,12 +8,36 @@ export function render(vnode: any, container: any) {
 
 function patch(vnode: any, container: any) {
   // patch -> vnode.type - > 0001 & 0001 = element ?   0010 & 0010  = component
-  const { shapeFlag } = vnode
-  if (shapeFlag & shapeFlags.ELEMENT) {
-    processElement(vnode, container)
-  } else if (shapeFlag & shapeFlags.STATEFUL_COMPONENT) {
-    processComponent(vnode, container)
+  const { shapeFlag, type } = vnode
+  switch (type) {
+    case Fragment:
+      // 如果是Fragment特殊节点,那么只渲染其子节点内容
+      processFragment(vnode, container)
+      break;
+    case Text:
+      processText(vnode, container)
+      break;
+    default:
+      if (shapeFlag & shapeFlags.ELEMENT) {
+        processElement(vnode, container)
+      } else if (shapeFlag & shapeFlags.STATEFUL_COMPONENT) {
+        processComponent(vnode, container)
+      }
+      break;
   }
+}
+
+function processText(vnode, container) {
+  // 子节点为Text特殊节点，直接创建文本节点追加
+  const { children } = vnode
+  const textNode = (vnode.el = document.createTextNode(children))
+  container.append(textNode)
+
+}
+
+function processFragment(vnode, container) {
+  // 利用之前已经写好的mountChildren
+  mountChildren(vnode, container)
 }
 
 function processElement(vnode, container) {

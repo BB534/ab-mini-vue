@@ -42,3 +42,5 @@
  - [x] 支持 emit
  - [x] 支持 $slots
  - [x] 支持 slots 
+ - [x] 支持Fragment
+ - [x] 支持Text

@@ -1,4 +1,9 @@
 import { shapeFlags } from './shapeFlags'
+
+// 特殊节点
+export const Fragment = Symbol("Fragment")
+// 子节点为文本直接渲染
+export const Text = Symbol("Text")
 export function createVnode(type: any, props?: any, children?: any) {
   const vnode = {
     type,
@@ -28,4 +33,9 @@ export function createVnode(type: any, props?: any, children?: any) {
 function getTypeFlags(type) {
   // 当类型为字符串时 0000 | 0001 = 0001 = element
   return typeof type === 'string' ? shapeFlags.ELEMENT : shapeFlags.STATEFUL_COMPONENT
+}
+
+
+export function createTextVnode(text) {
+  return createVnode(Text, {}, text)
 }
