@@ -9,9 +9,9 @@ export function createComponentInstance(vnode, parent) {
     type: vnode.type, // 为了后续后续组件方便,重定义挂载到实例上
     setupState: {}, // state
     props: null, // props
-    provides: {}, // 注入数据
+    provides: parent?.provides ? parent.provides : {}, // 注入数据,如果父组件provides时就注入为父组件的值，如果没有就是初始化
     parent, // 父组件
-    slots: {}, // 插槽
+    slots: {}, // slots
     emit: () => { } // emit事件
   }
   // 初始化时,绑定emit传递当前组件实例作为instance参数

@@ -1,9 +1,9 @@
 import { createComponentInstance, setupComponent } from './component';
 import { shapeFlags } from './shapeFlags';
 import { Fragment, Text } from './vnode'
-export function render(vnode: any, container: any, parentComponent) {
+export function render(vnode: any, container: any) {
   // patch
-  patch(vnode, container, parentComponent)
+  patch(vnode, container, null)
 }
 
 function patch(vnode: any, container: any, parentComponent) {

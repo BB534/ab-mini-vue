@@ -32,6 +32,7 @@
  # runtime-core
  - [x] createApp的实现
  - [x] createVnode 的实现
+ - [x] 支持 provide & inject 
  - [x] render 的实现
  - [x] h 函数
  - [x] patch
