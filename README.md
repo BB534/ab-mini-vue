@@ -42,5 +42,6 @@
  - [x] 支持 emit
  - [x] 支持 $slots
  - [x] 支持 slots 
- - [x] 支持Fragment
- - [x] 支持Text
+ - [x] 支持 Fragment
+ - [x] 支持 Text
+ - [x] 支持 getCurrentInstance

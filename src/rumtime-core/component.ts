@@ -33,6 +33,8 @@ function setupStatefulComponent(instance) {
 
   const { setup } = Component
   if (setup) {
+    // getCurrentInstance() 只能在setup中使用
+    setCurrentInstance(instance)
     // 调用setup函数 -> function ? object
     // 调用setup时将props组件实例上的props传递进去
     // 使用shallowReadonly包裹setup返回值,让其是浅层不可修改的
@@ -40,6 +42,8 @@ function setupStatefulComponent(instance) {
     const setupResult = setup(shallowReadonly(instance.props), {
       emit: instance.emit
     })
+    // 当切换下一个组件前要置空
+    setCurrentInstance(null)
     handlerSetupResult(instance, setupResult)
   }
 }
@@ -65,4 +69,14 @@ function finishComponentSetup(instance) {
   // if (Component.render) {
 
   // }
+}
+
+// 当前组件实例
+let currentInstance = null
+export function getCurrentInstance() {
+  return currentInstance
+}
+// 抽成函数赋值，方便调试
+function setCurrentInstance(instance) {
+  currentInstance = instance
 }

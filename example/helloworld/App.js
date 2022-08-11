@@ -1,10 +1,12 @@
-import { h, createTextVnode } from '../../lib/ab-mini-vue-esm.js'
+import { h, createTextVnode, getCurrentInstance } from '../../lib/ab-mini-vue-esm.js'
 import { Foo } from './Foo.js'
 import { Slots } from './Slots.js'
 window.self = null
 export const App = {
+	name: 'App',
 	render() {
 		window.self = this
+
 		// 单个插槽
 		// const slot = h(Slots, {}, h('p', {}, 'slots插槽p标签'))
 		// 数组插槽
@@ -53,6 +55,9 @@ export const App = {
 		)
 	},
 	setup() {
+		// 获取当前组件对象实例方法
+		const instance = getCurrentInstance()
+		console.log(instance)
 		return {
 			msg: '改变代理对象'
 		}

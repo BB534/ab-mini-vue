@@ -1,7 +1,10 @@
-import { h } from '../../lib/ab-mini-vue-esm.js'
+import { h, getCurrentInstance } from '../../lib/ab-mini-vue-esm.js'
 
 export const Foo = {
+	name: 'Foo',
 	setup(props, { emit }) {
+		const instance = getCurrentInstance()
+		console.log(instance)
 		// 1.setup可以接收props
 		// 2. props.count 可以在render中获取
 		// 3. props是一个shallowReadonly

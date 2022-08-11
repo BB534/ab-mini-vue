@@ -1,6 +1,10 @@
-import { h, renderSlots } from '../../lib/ab-mini-vue-esm.js'
+import { h, renderSlots, getCurrentInstance } from '../../lib/ab-mini-vue-esm.js'
 export const Slots = {
-	setup(props) {},
+	name: 'Slots',
+	setup(props) {
+		const instance = getCurrentInstance()
+		console.log(instance)
+	},
 	render() {
 		const foo = h('p', {}, 'foo')
 
