@@ -1,6 +1,7 @@
 import { h, createTextVnode, getCurrentInstance } from '../../lib/ab-mini-vue-esm.js'
 import { Foo } from './Foo.js'
 import { Slots } from './Slots.js'
+import { Provide } from './Inject.js'
 window.self = null
 export const App = {
 	name: 'App',
@@ -49,7 +50,8 @@ export const App = {
 						console.log('驼峰方式触发', c, d)
 					}
 				}),
-				slot
+				slot,
+				h(Provide, {}, '')
 			]
 			// 调用Foo组件
 		)

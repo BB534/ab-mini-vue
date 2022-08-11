@@ -3,14 +3,16 @@ import { emit } from './componentEmit'
 import { initProps } from './componentProps'
 import { PublicInstanceProxyHandlers } from './componentPublicInstance'
 import { initSlots } from './componentSlots'
-export function createComponentInstance(vnode) {
+export function createComponentInstance(vnode, parent) {
   const component = {
     vnode,
     type: vnode.type, // 为了后续后续组件方便,重定义挂载到实例上
     setupState: {}, // state
-    props: null,
-    slots: {},
-    emit: () => { }
+    props: null, // props
+    provides: {}, // 注入数据
+    parent, // 父组件
+    slots: {}, // 插槽
+    emit: () => { } // emit事件
   }
   // 初始化时,绑定emit传递当前组件实例作为instance参数
   component.emit = emit.bind(null, component) as any
