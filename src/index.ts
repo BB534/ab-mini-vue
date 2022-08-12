@@ -1,2 +1,2 @@
-export * from './rumtime-core/index';
+export * from './runtime-dom'
 
