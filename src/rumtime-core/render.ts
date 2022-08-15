@@ -1,3 +1,4 @@
+import { effect, proxyRefs } from '../reactivity';
 import { createComponentInstance, setupComponent } from './component';
 import { createAppApi } from './createApp';
 import { shapeFlags } from './shapeFlags';
@@ -100,16 +101,21 @@ export function createRender(options) {
   }
 
   function setupRenderEffect(vnode, instance, container) {
-    // App -> patch -> component ? -> patch
-    // 获取setupState代理对象挂载到render
-    const { proxy } = instance
-    const subTree = instance.render.call(proxy)
-    // subTree === vnode  
-    // vnode -> element -> mountElement
-    patch(subTree, container, instance)
+    // 使用effect来收集响应式依赖,然后对虚拟节点进行diff更新
+    effect(() => {
+      // App -> patch -> component ? -> patch
+      // 获取setupState代理对象挂载到render
+      const { proxy } = instance
+      // 使用proxyRefs来代理state,让其中的state在模板中使用时可以不用写value
+      const subTree = instance.render.call(proxyRefs(proxy))
+      // subTree === vnode  
+      // vnode -> element -> mountElement
+      patch(subTree, container, instance)
 
-    // 在所有element -> mount 完成后挂载节点到虚拟节点el上
-    vnode.el = subTree.el
+      // 在所有element -> mount 完成后挂载节点到虚拟节点el上
+      vnode.el = subTree.el
+    })
+
   }
 
   // 创建一个对对象,然后使用高阶函数将render返回
