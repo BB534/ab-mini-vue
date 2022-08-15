@@ -46,3 +46,4 @@
  - [x] 支持 Fragment
  - [x] 支持 Text
  - [x] 支持 getCurrentInstance
+ - [x] 自从customRender
