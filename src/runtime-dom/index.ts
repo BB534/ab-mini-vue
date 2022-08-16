@@ -7,14 +7,23 @@ function createElement(vnode) {
 }
 
 //自定义属性挂载
-function patchProp(el, key, val) {
+function patchProp(el, key, prevValue, nextValue) {
   // 事件已on开头 类似 onClick
+
   const isOn = /^on[A-z]/.test(key)
   if (isOn) {
     const event = key.slice(2).toLowerCase()
-    el.addEventListener(event, val)
+    el.addEventListener(event, nextValue)
+  } else {
+    // 如果值为undefined 或 null,就将其移除
+    if (nextValue === undefined || nextValue === null) {
+      el.removeAttribute(key)
+    } else {
+
+      el.setAttribute(key, nextValue)
+    }
   }
-  el.setAttribute(key, val)
+
 }
 
 // 自定义挂载

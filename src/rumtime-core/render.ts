@@ -1,3 +1,4 @@
+import { EMPTY_OBJ } from './../shared/index';
 import { effect } from '../reactivity';
 import { createComponentInstance, setupComponent } from './component';
 import { createAppApi } from './createApp';
@@ -12,6 +13,8 @@ export function createRender(options) {
     patch(null, vnode, container, null)
   }
 
+  // n1:旧
+  // n2:新
   function patch(n1, n2: any, container: any, parentComponent) {
     // patch -> vnode.type - > 0001 & 0001 = element ?   0010 & 0010  = component
     const { shapeFlag, type } = n2
@@ -57,8 +60,33 @@ export function createRender(options) {
   }
 
   function patchElement(n1, n2, container) {
-    console.log("n1", n1);
-    console.log("n2", n2);
+    // 为了在patchProps判断是否是空对象，在外部定义一个空的{}常量，对比都引用这个就可以防止新建对象不一致的问题
+    const oldProps = n1.props || EMPTY_OBJ
+    const newProps = n2.props || EMPTY_OBJ
+    // 从旧的节点中取el,此时更新n2并没有挂载el,所以需要赋值作为下一次备用
+    const el = (n2.el = n1.el)
+    patchProps(el, oldProps, newProps)
+  }
+
+  function patchProps(el, oldProps, newProps) {
+    if (oldProps !== newProps) {
+      // 遍历新的props,然后和老的属性对比，不一样就修改，没有就删除,
+      for (const key in newProps) {
+        const prevProps = oldProps[key]
+        const nextProps = newProps[key]
+        if (nextProps !== prevProps) {
+          HostPatchProp(el, key, prevProps, nextProps)
+        }
+      }
+      if (oldProps !== EMPTY_OBJ) {
+        // 如果旧的值在新的里面没有了，那么就删除
+        for (const key in oldProps) {
+          if (!(key in newProps)) {
+            HostPatchProp(el, key, oldProps[key], null)
+          }
+        }
+      }
+    }
   }
 
   function mountElement(vnode, container, parentComponent) {
@@ -84,7 +112,7 @@ export function createRender(options) {
       //   el.addEventListener(event, val)
       // }
       // el.setAttribute(key, val)
-      HostPatchProp(el, key, val)
+      HostPatchProp(el, key, null, val)
     }
     // container.append(el)
     HostInsert(el, container)
@@ -134,7 +162,7 @@ export function createRender(options) {
 
         const prevSubTree = instance.subTree
         instance.subTree = subTree
-        patch(prevSubTree, subTree)
+        patch(prevSubTree, subTree, container, instance)
       }
 
     })
