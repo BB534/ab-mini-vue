@@ -2,8 +2,12 @@ import { h, ref } from '../../lib/ab-mini-vue-esm.js'
 export const App = {
 	setup(props) {
 		const count = ref(1)
+		const onClick = () => {
+			count.value++
+		}
 		return {
-			count
+			count,
+			onClick
 		}
 	},
 	render() {
@@ -12,9 +16,7 @@ export const App = {
 			h(
 				'button',
 				{
-					onClick: () => {
-						this.count++
-					}
+					onClick: this.onClick
 				},
 				'addCount'
 			)
