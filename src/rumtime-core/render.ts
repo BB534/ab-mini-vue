@@ -7,7 +7,7 @@ import { Fragment, Text } from './vnode'
 
 // 创建一个对外暴露的固定接口,方便用于内部渲染器的自定义 dom 或 canvas
 export function createRender(options) {
-  const { createElement: HostCreateElement, patchProp: HostPatchProp, insert: HostInsert } = options
+  const { createElement: HostCreateElement, patchProp: HostPatchProp, insert: HostInsert, remove: HostRemove, setElementText: HostSetElementText } = options
   function render(vnode: any, container: any) {
     // patch
     patch(null, vnode, container, null)
@@ -46,7 +46,7 @@ export function createRender(options) {
 
   function processFragment(n1, n2, container, parentComponent) {
     // 利用之前已经写好的mountChildren
-    mountChildren(n2, container, parentComponent)
+    mountChildren(n2.children, container, parentComponent)
   }
 
   function processElement(n1, n2, container, parentComponent) {
@@ -55,19 +55,55 @@ export function createRender(options) {
 
       mountElement(n2, container, parentComponent)
     } else {
-      patchElement(n1, n2, container)
+      patchElement(n1, n2, container, parentComponent)
     }
   }
 
-  function patchElement(n1, n2, container) {
+  function patchElement(n1, n2, container, parentComponent) {
     // 为了在patchProps判断是否是空对象，在外部定义一个空的{}常量，对比都引用这个就可以防止新建对象不一致的问题
     const oldProps = n1.props || EMPTY_OBJ
     const newProps = n2.props || EMPTY_OBJ
     // 从旧的节点中取el,此时更新n2并没有挂载el,所以需要赋值作为下一次备用
     const el = (n2.el = n1.el)
+    patchChildren(n1, n2, el, parentComponent)
     patchProps(el, oldProps, newProps)
   }
 
+  function patchChildren(n1, n2, container, parentComponent) {
+    const prevShapeFlag = n1.shapeFlag
+    const c1 = n1.children
+    const newShapeFlag = n2.shapeFlag
+    const c2 = n2.children
+    // 如果新节点是一个文本节点
+    if (newShapeFlag & shapeFlags.TEXT_CHILDREN) {
+      // 旧节点是一个数组
+      if (prevShapeFlag & shapeFlags.ARRAY_CHILDREN) {
+        // 1.把老的children清空
+        unmountChildren(c1)
+        // 2.然后设置text
+        HostSetElementText(container, c2)
+      }
+      // 旧节点为文本，新节点为文本，切内容不同
+      if (c1 !== c2) {
+        HostSetElementText(container, c2)
+      }
+    } else {
+      // 1.旧节点为text,新节点为array
+      if (prevShapeFlag & shapeFlags.TEXT_CHILDREN) {
+        // 1.把文本置空，然后挂载子节点
+        HostSetElementText(container, "")
+        mountChildren(c2, container, parentComponent)
+      }
+    }
+  }
+
+  function unmountChildren(children) {
+    for (let i = 0; i < children.length; i++) {
+      // 取到当前节点的el
+      const el = children[i].el
+      HostRemove(el)
+    }
+  }
   function patchProps(el, oldProps, newProps) {
     if (oldProps !== newProps) {
       // 遍历新的props,然后和老的属性对比，不一样就修改，没有就删除,
@@ -100,7 +136,7 @@ export function createRender(options) {
     if (shapeFlag & shapeFlags.TEXT_CHILDREN) {
       el.textContent = children
     } else if (shapeFlag & shapeFlags.ARRAY_CHILDREN) {
-      mountChildren(vnode, el, parentComponent)
+      mountChildren(vnode.children, el, parentComponent)
     }
     // 绑定属性,绑定事件，patchProp
     for (const key in props) {
@@ -118,8 +154,8 @@ export function createRender(options) {
     HostInsert(el, container)
   }
 
-  function mountChildren(vnode, container, parentComponent) {
-    vnode.children.forEach(v => {
+  function mountChildren(children, container, parentComponent) {
+    children.forEach(v => {
       patch(null, v, container, parentComponent)
     })
   }

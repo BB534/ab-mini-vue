@@ -32,10 +32,24 @@ function insert(el, container) {
 }
 
 
+// 自定义移除
+function remove(child) {
+  const parent = child.parentNode
+  if (parent) {
+    parent.removeChild(child)
+  }
+}
+
+function setElementText(el, text) {
+  el.textContent = text
+}
+
 const render = createRender({
   createElement,
   patchProp,
-  insert
+  insert,
+  remove,
+  setElementText
 })
 
 
