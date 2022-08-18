@@ -133,9 +133,9 @@ export function createRender(options) {
     // 新的比旧的长，创建新节点
     if (i > e1) {
       if (i <= e2) {
-        const nextPos = i + 1 // 定位新增的位置
+        const nextPos = e2 + 1 // 定位新增的位置
         // 判断是往后还是往前插入
-        const anchor = i + 1 < c2.length ? c2[nextPos].el : null
+        const anchor = nextPos < c2.length ? c2[nextPos].el : null
         while (i <= e2) {
           patch(null, c2[i], container, parentComponent, anchor)
           i++
@@ -148,6 +148,8 @@ export function createRender(options) {
         HostRemove(c1[i].el)
         i++
       }
+    } else {
+      // 乱序
     }
   }
 
