@@ -27,8 +27,10 @@ function patchProp(el, key, prevValue, nextValue) {
 }
 
 // 自定义挂载
-function insert(el, container) {
-  container.append(el)
+function insert(child, container, anchor) {
+  // container.append(el)
+  // 使用insertBefore
+  container.insertBefore(child, anchor || null)
 }
 
 
