@@ -152,6 +152,9 @@ export function createRender(options) {
       // 中间对比
       let s1 = i
       let s2 = i
+      // 将新节点长度存储 c2.length - i
+      const toBeforePatched = e2 - s2 + 1
+      let patched = 0
       // 先将新的映射起来
       const newIndexMap = new Map()
       for (let i = s2; i <= e2; i++) {
@@ -162,6 +165,10 @@ export function createRender(options) {
 
       for (let i = s1; i <= e1; i++) {
         const prevChild = c1[i]
+        // 当patch长度已超过需要处理的长度，直接pass掉所有多余节点
+        if (patched >= toBeforePatched) {
+          HostRemove(prevChild.el)
+        }
         // 如果有，那么就是在新的内部存在
         let newIndex
         if (prevChild.key != null) {
@@ -182,6 +189,8 @@ export function createRender(options) {
         } else {
           // 如果存在继续patch进行深度对比
           patch(prevChild, c2[newIndex], container, parentComponent, null)
+          // 每处理完一个就将patched + 1
+          patched++
         }
       }
     }
