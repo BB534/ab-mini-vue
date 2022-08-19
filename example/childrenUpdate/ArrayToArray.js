@@ -97,19 +97,40 @@ import { ref, h } from '../../lib/ab-mini-vue-esm.js'
 const prevChildren = [
 	h('p', { key: 'A' }, 'A'),
 	h('p', { key: 'B' }, 'B'),
-	h('p', { key: 'C', id: 'c-prev' }, 'C'),
-	h('p', { key: 'E' }, 'E'),
+	h('p', { key: 'C' }, 'C'),
 	h('p', { key: 'D' }, 'D'),
+	h('p', { key: 'E' }, 'E'),
 	h('p', { key: 'F' }, 'F'),
-	h('p', { key: 'G' }, 'G')
+	h('p', { key: 'G' }, 'G'),
+	h(
+		'button',
+		{
+			onClick: () => {
+				window.isChange.value = true
+			},
+			key: 'button'
+		},
+		'点我进行diff'
+	)
 ]
 const nextChildren = [
 	h('p', { key: 'A' }, 'A'),
 	h('p', { key: 'B' }, 'B'),
 	h('p', { key: 'E' }, 'E'),
-	h('p', { key: 'C', id: 'c-next' }, 'C'),
+	h('p', { key: 'C' }, 'C'),
+	h('p', { key: 'D' }, 'D'),
 	h('p', { key: 'F' }, 'F'),
-	h('p', { key: 'G' }, 'G')
+	h('p', { key: 'G' }, 'G'),
+	h(
+		'button',
+		{
+			onClick: () => {
+				window.isChange.value = false
+			},
+			key: 'button'
+		},
+		'点我进行diff'
+	)
 ]
 export const ArrayToArray = {
 	setup(props) {

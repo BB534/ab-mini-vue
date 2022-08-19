@@ -1,4 +1,4 @@
-import { EMPTY_OBJ } from './../shared/index';
+import { EMPTY_OBJ, getSequence } from './../shared/index';
 import { effect } from '../reactivity';
 import { createComponentInstance, setupComponent } from './component';
 import { createAppApi } from './createApp';
@@ -84,7 +84,7 @@ export function createRender(options) {
         // 2.然后设置text
         HostSetElementText(container, c2)
       }
-      // 旧节点为文本，新节点为文本，切内容不同
+      // 旧节点为文本，新节点为文本，且内容不同
       if (c1 !== c2) {
         HostSetElementText(container, c2)
       }
@@ -155,6 +155,11 @@ export function createRender(options) {
       // 将新节点长度存储 c2.length - i
       const toBeforePatched = e2 - s2 + 1
       let patched = 0
+      // 初始化需要进行最长递增子序列对比的映射表
+      // 固定长度的数组，性能更优
+      const newIndexToOldIndexMap = new Array(toBeforePatched)
+      // 初始化
+      for (let i = 0; i < toBeforePatched; i++) newIndexToOldIndexMap[i] = 0
       // 先将新的映射起来
       const newIndexMap = new Map()
       for (let i = s2; i <= e2; i++) {
@@ -187,11 +192,33 @@ export function createRender(options) {
         if (newIndex === undefined) {
           HostRemove(prevChild.el)
         } else {
+          // 给 newIndexToOldIndexMap赋值归0,但是为0为了避免没有创建，所以+1
+          newIndexToOldIndexMap[newIndex - s2] = i + 1
           // 如果存在继续patch进行深度对比
           patch(prevChild, c2[newIndex], container, parentComponent, null)
           // 每处理完一个就将patched + 1
           patched++
         }
+      }
+      // 计算子序列
+      const insertSequence = getSequence(newIndexToOldIndexMap)
+      console.log(insertSequence);
+      // 对比移动
+      let j = insertSequence.length - 1
+
+      for (let i = toBeforePatched - 1; i >= 0; i--) {
+        const nextIndex = i + s2
+        const nextChild = c2[nextIndex]
+        const anchor = nextIndex + 1 < c2.length ? c2[nextIndex + 1].el : null
+        if (i !== insertSequence[j]) {
+          // 不相同，移动
+          console.log("移动");
+          HostInsert(nextChild.el, container, anchor)
+        } else {
+          // 不需要移动
+          j--
+        }
+
       }
     }
   }
