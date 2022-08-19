@@ -60,11 +60,34 @@ import { ref, h } from '../../lib/ab-mini-vue-esm.js'
 // ]
 
 // 右侧
-const nextChildren = [h('div', { key: 'A' }, 'A'), h('div', { key: 'B' }, 'B')]
+// const nextChildren = [h('div', { key: 'A' }, 'A'), h('div', { key: 'B' }, 'B')]
+// const prevChildren = [
+// 	h('div', { key: 'C' }, 'C'),
+// 	h('div', { key: 'A' }, 'A'),
+// 	h('div', { key: 'B' }, 'B')
+// ]
+
+// 中间对比,删（老的里面存在，新的不存在）
+// 左->查找定位
+// a,b,(c,d),f,g = n1
+// a,b,(e,c),f,g = n2
+// 定位 e:2 c:3 查e与c是否存在老节点然后进行patch
+// 删除D修改C的props
 const prevChildren = [
-	h('div', { key: 'C' }, 'C'),
-	h('div', { key: 'A' }, 'A'),
-	h('div', { key: 'B' }, 'B')
+	h('p', { key: 'A' }, 'A'),
+	h('p', { key: 'B' }, 'B'),
+	h('p', { key: 'C', id: 'c-prev' }, 'C'),
+	h('p', { key: 'D' }, 'D'),
+	h('p', { key: 'F' }, 'F'),
+	h('p', { key: 'G' }, 'G')
+]
+const nextChildren = [
+	h('p', { key: 'A' }, 'A'),
+	h('p', { key: 'B' }, 'B'),
+	h('p', { key: 'E' }, 'E'),
+	h('p', { key: 'C', id: 'c-next' }, 'C'),
+	h('p', { key: 'F' }, 'F'),
+	h('p', { key: 'G' }, 'G')
 ]
 
 export const ArrayToArray = {
