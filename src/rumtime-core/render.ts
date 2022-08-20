@@ -158,6 +158,10 @@ export function createRender(options) {
       // 初始化需要进行最长递增子序列对比的映射表
       // 固定长度的数组，性能更优
       const newIndexToOldIndexMap = new Array(toBeforePatched)
+      // 是否移动条件
+      let moved = false
+      // 最大递增数
+      let maxNewIndexSoFar = 0
       // 初始化
       for (let i = 0; i < toBeforePatched; i++) newIndexToOldIndexMap[i] = 0
       // 先将新的映射起来
@@ -192,6 +196,11 @@ export function createRender(options) {
         if (newIndex === undefined) {
           HostRemove(prevChild.el)
         } else {
+          if (newIndex >= maxNewIndexSoFar) {
+            maxNewIndexSoFar = newIndex
+          } else {
+            moved = true
+          }
           // 给 newIndexToOldIndexMap赋值归0,但是为0为了避免没有创建，所以+1
           newIndexToOldIndexMap[newIndex - s2] = i + 1
           // 如果存在继续patch进行深度对比
@@ -201,7 +210,7 @@ export function createRender(options) {
         }
       }
       // 计算子序列
-      const insertSequence = getSequence(newIndexToOldIndexMap)
+      const insertSequence = moved ? getSequence(newIndexToOldIndexMap) : []
       console.log(insertSequence);
       // 对比移动
       let j = insertSequence.length - 1
@@ -210,13 +219,17 @@ export function createRender(options) {
         const nextIndex = i + s2
         const nextChild = c2[nextIndex]
         const anchor = nextIndex + 1 < c2.length ? c2[nextIndex + 1].el : null
-        if (i !== insertSequence[j]) {
-          // 不相同，移动
-          console.log("移动");
-          HostInsert(nextChild.el, container, anchor)
-        } else {
-          // 不需要移动
-          j--
+        if (newIndexToOldIndexMap[i] === 0) {
+          // 新创建
+          patch(null, nextChild, container, parentComponent, anchor)
+        } else if (moved) {
+          if (j < 0 || i !== insertSequence[j]) {
+            // 不相同，移动
+            HostInsert(nextChild.el, container, anchor)
+          } else {
+            // 不需要移动
+            j--
+          }
         }
 
       }

@@ -94,12 +94,54 @@ import { ref, h } from '../../lib/ab-mini-vue-esm.js'
 // a,b,(c,e,d),f,g = n1
 // a,b,(e,c),f,g = n2
 // 处理完e,c就可以直接将d给pass了
+// const prevChildren = [
+// 	h('p', { key: 'A' }, 'A'),
+// 	h('p', { key: 'B' }, 'B'),
+// 	h('p', { key: 'C' }, 'C'),
+// 	h('p', { key: 'D' }, 'D'),
+// 	h('p', { key: 'E' }, 'E'),
+// 	h('p', { key: 'F' }, 'F'),
+// 	h('p', { key: 'G' }, 'G'),
+// 	h(
+// 		'button',
+// 		{
+// 			onClick: () => {
+// 				window.isChange.value = true
+// 			},
+// 			key: 'button'
+// 		},
+// 		'点我进行diff'
+// 	)
+// ]
+// const nextChildren = [
+// 	h('p', { key: 'A' }, 'A'),
+// 	h('p', { key: 'B' }, 'B'),
+// 	h('p', { key: 'E' }, 'E'),
+// 	h('p', { key: 'C' }, 'C'),
+// 	h('p', { key: 'D' }, 'D'),
+// 	h('p', { key: 'F' }, 'F'),
+// 	h('p', { key: 'G' }, 'G'),
+// 	h(
+// 		'button',
+// 		{
+// 			onClick: () => {
+// 				window.isChange.value = false
+// 			},
+// 			key: 'button'
+// 		},
+// 		'点我进行diff'
+// 	)
+// ]
+
+// 完整例子
+
 const prevChildren = [
 	h('p', { key: 'A' }, 'A'),
 	h('p', { key: 'B' }, 'B'),
 	h('p', { key: 'C' }, 'C'),
 	h('p', { key: 'D' }, 'D'),
 	h('p', { key: 'E' }, 'E'),
+	h('p', { key: 'Z' }, 'Z'),
 	h('p', { key: 'F' }, 'F'),
 	h('p', { key: 'G' }, 'G'),
 	h(
@@ -116,9 +158,10 @@ const prevChildren = [
 const nextChildren = [
 	h('p', { key: 'A' }, 'A'),
 	h('p', { key: 'B' }, 'B'),
-	h('p', { key: 'E' }, 'E'),
-	h('p', { key: 'C' }, 'C'),
 	h('p', { key: 'D' }, 'D'),
+	h('p', { key: 'C' }, 'C'),
+	h('p', { key: 'Y' }, 'Y'),
+	h('p', { key: 'E' }, 'E'),
 	h('p', { key: 'F' }, 'F'),
 	h('p', { key: 'G' }, 'G'),
 	h(
