@@ -37,8 +37,9 @@
  - [x] h 函数
  - [x] patch
  - [x] 支持 $el
+ - [x] 支持 $props
  - [x] 支持 setupState
- - [x] 支持注册事件
+ - [x] 支持 注册事件
  - [x] 支持 props
  - [x] 支持 emit
  - [x] 支持 $slots
@@ -46,4 +47,4 @@
  - [x] 支持 Fragment
  - [x] 支持 Text
  - [x] 支持 getCurrentInstance
- - [x] 自从customRender
+ - [x] 支持customRender

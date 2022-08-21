@@ -314,13 +314,30 @@ export function createRender(options) {
   }
 
   function updateComponent(n1, n2) {
-    // 更新组件,重新调用render函数,然后改变虚拟节点，改变el，改变props
     const instance = (n2.component = n1.component)
-    // 下次要更新的虚拟节点
-    instance.next = n2
-    instance.update()
+    if (shouldUpdateComponent(n1, n2)) {
+      // 更新组件,重新调用render函数,然后改变虚拟节点，改变el，改变props
+      // 下次要更新的虚拟节点
+      instance.next = n2
+      instance.update()
+    } else {
+      // 不更新也需要重置
+      n2.el = n1.el
+      instance.vnode = n2
+    }
   }
 
+  function shouldUpdateComponent(n1, n2) {
+    const { props: prevProps } = n1
+    const { props: nextProps } = n2
+    for (const key in nextProps) {
+      if (nextProps[key] !== prevProps[key]) {
+        return true
+      }
+    }
+
+    return false
+  }
   function mountComponent(vnode, container, parentComponent, anchor) {
     // 抽象出一个组件实例对象
     const instance = (vnode.component = createComponentInstance(vnode, parentComponent))
