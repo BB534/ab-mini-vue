@@ -47,4 +47,5 @@
  - [x] 支持 Fragment
  - [x] 支持 Text
  - [x] 支持 getCurrentInstance
- - [x] 支持customRender
+ - [x] 支持 customRender
+ - [x] 支持 nextTick

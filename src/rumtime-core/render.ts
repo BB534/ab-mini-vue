@@ -4,6 +4,7 @@ import { createComponentInstance, setupComponent } from './component';
 import { createAppApi } from './createApp';
 import { shapeFlags } from './shapeFlags';
 import { Fragment, Text } from './vnode'
+import { queueJobs } from './nextTick';
 
 // 创建一个对外暴露的固定接口,方便用于内部渲染器的自定义 dom 或 canvas
 export function createRender(options) {
@@ -115,7 +116,7 @@ export function createRender(options) {
       }
       i++
     }
-    console.log(i);
+
     // 查找右侧,右侧左移
     while (i <= e1 && i <= e2) {
       const n1 = c1[e1]
@@ -211,7 +212,7 @@ export function createRender(options) {
       }
       // 计算子序列
       const insertSequence = moved ? getSequence(newIndexToOldIndexMap) : []
-      console.log(insertSequence);
+
       // 对比移动
       let j = insertSequence.length - 1
 
@@ -379,6 +380,11 @@ export function createRender(options) {
         patch(prevSubTree, subTree, container, instance, anchor)
       }
 
+    }, {
+      // 利用effect scheduler来实现收集更新任务，微任务调用
+      scheduler() {
+        queueJobs(instance.update)
+      }
     })
 
   }

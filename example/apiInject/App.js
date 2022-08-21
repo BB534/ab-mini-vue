@@ -21,7 +21,7 @@ export const App = {
 	setup() {
 		// 获取当前组件对象实例方法
 		const instance = getCurrentInstance()
-		console.log(instance)
+	
 		return {
 			msg: '改变代理对象'
 		}
