@@ -184,7 +184,7 @@ export function createRender(options) {
           newIndex = newIndexMap.get(prevChild.key)
         } else {
           // 遍历，判断节点是否存在
-          for (let j = s2; j < e2; j++) {
+          for (let j = s2; j <= e2; j++) {
             // 判断之前与现在的节点是否相同
             if (isSomeVnodeType(prevChild, c2[j])) {
               newIndex = j
