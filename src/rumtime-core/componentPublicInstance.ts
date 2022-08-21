@@ -2,7 +2,8 @@ import { hasOwn } from '../shared/index'
 
 const PublicPropertiesMap = {
   $el: (i) => i.vnode.el,
-  $slots: (i) => i.slots
+  $slots: (i) => i.slots,
+  $props: (i) => i.props
 }
 
 // 组件代理对象，提供$el state $data等 api

@@ -8,6 +8,7 @@ export function createComponentInstance(vnode, parent) {
   const component = {
     vnode,
     type: vnode.type, // 为了后续后续组件方便,重定义挂载到实例上
+    next: null,
     setupState: {}, // state
     props: null, // props
     provides: parent?.provides ? parent.provides : {}, // 注入数据,如果父组件provides时就注入为父组件的值，如果没有就是初始化

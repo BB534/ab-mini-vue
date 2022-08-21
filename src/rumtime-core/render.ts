@@ -305,12 +305,25 @@ export function createRender(options) {
 
   function processComponent(n1, n2, container, parentComponent, anchor) {
     // 组件类型，挂载component
-    mountComponent(n2, container, parentComponent, anchor)
+    if (!n1) {
+
+      mountComponent(n2, container, parentComponent, anchor)
+    } else {
+      updateComponent(n1, n2)
+    }
+  }
+
+  function updateComponent(n1, n2) {
+    // 更新组件,重新调用render函数,然后改变虚拟节点，改变el，改变props
+    const instance = (n2.component = n1.component)
+    // 下次要更新的虚拟节点
+    instance.next = n2
+    instance.update()
   }
 
   function mountComponent(vnode, container, parentComponent, anchor) {
     // 抽象出一个组件实例对象
-    const instance = createComponentInstance(vnode, parentComponent)
+    const instance = (vnode.component = createComponentInstance(vnode, parentComponent))
     // 调用setup(组件实例对象)
     setupComponent(instance)
     // 调用render
@@ -319,9 +332,9 @@ export function createRender(options) {
 
   function setupRenderEffect(vnode, instance, container, anchor) {
     // 使用effect来收集响应式依赖,然后对虚拟节点进行diff更新
-    effect(() => {
+    // 利用effect的返回值runner函数,挂载到实例上，用于组件更新
+    instance.update = effect(() => {
       if (!instance.isMounted) {
-        console.log("init");
         // App -> patch -> component ? -> patch
         // 获取setupState代理对象挂载到render
         const { proxy } = instance
@@ -335,7 +348,12 @@ export function createRender(options) {
         vnode.el = subTree.el
         instance.isMounted = true
       } else {
-        console.log('update');
+        const { next, vnode } = instance
+        if (next) {
+          next.el = vnode.el
+          updateComponentPreRender(instance, next)
+        }
+        // 处理更新组件
         const { proxy } = instance
         const subTree = instance.render.call(proxy)
 
@@ -352,4 +370,13 @@ export function createRender(options) {
   return {
     createApp: createAppApi(render)
   }
+}
+
+function updateComponentPreRender(instance, next) {
+  // 更新虚拟节点
+  instance.vnode = next
+  instance.next = null
+  // 需要更新实例对象上的props
+  instance.props = next.props
+
 }
